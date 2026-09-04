@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import Dashboard from './Dashboard'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 type Product = {
   id: string
@@ -48,7 +49,7 @@ function App() {
         setProductsLoading(true)
 
         const response = await fetch(
-          'http://localhost:5000/api/products'
+          `${API_BASE_URL}/api/products`
         )
 
         const data = await response.json()
@@ -94,7 +95,7 @@ function App() {
 
     try {
       const response = await fetch(
-        'http://localhost:5000/api/agent/recommend',
+        `${API_BASE_URL}/api/agent/recommend`,
         {
           method: 'POST',
           headers: {
@@ -253,7 +254,7 @@ function App() {
 
       const orderResponse =
         await fetch(
-          'http://localhost:5000/api/payment/create-order',
+          `${API_BASE_URL}/api/payment/create-order`,
           {
             method: 'POST',
             headers: {
@@ -307,7 +308,7 @@ function App() {
 
             const verifyResponse =
               await fetch(
-                'http://localhost:5000/api/payment/verify',
+                `${API_BASE_URL}/api/payment/verify`,
                 {
                   method: 'POST',
                   headers: {
