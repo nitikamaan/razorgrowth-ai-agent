@@ -1,0 +1,81 @@
+// use prisma-next
+
+model Merchant {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+
+  products Product[]
+  orders   Order[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  merchantId  String
+  name        String
+  description String
+  price       Int
+  category    String
+  stock       Int      @default(100)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  merchant  Merchant   @relation(fields: [merchantId], references: [id])
+  orderItems OrderItem[]
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  orders Order[]
+}
+
+model Order {
+  id          String   @id @default(uuid())
+  merchantId  String
+  customerId  String
+  totalAmount Int
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+
+  merchant Merchant @relation(fields: [merchantId], references: [id])
+  customer Customer @relation(fields: [customerId], references: [id])
+  items    OrderItem[]
+  payment  Payment?
+}
+
+model OrderItem {
+  id        String @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Int
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Payment {
+  id                String   @id @default(uuid())
+  orderId           String   @unique
+  razorpayOrderId   String?  @unique
+  razorpayPaymentId String?  @unique
+  amount            Int
+  status            String   @default("CREATED")
+  createdAt         DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id])
+}
+
+model AuditEvent {
+  id        String   @id @default(uuid())
+  action    String
+  actor     String
+  entity    String
+  entityId  String?
+  details   String
+  createdAt DateTime @default(now())
+}
