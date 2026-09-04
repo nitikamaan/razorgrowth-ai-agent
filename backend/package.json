@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx src/server.ts",
-    "start": "node src/server.ts",
+    "start": "node dist/server.ts",
     "build": "tsc",
     "postinstall": "prisma skills sync || exit 0",
     "contract:emit": "prisma contract emit"
